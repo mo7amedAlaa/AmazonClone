@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { UserSingOut } from '../../redux/amazonSlice';
 import { productSearch } from '../../Api/api';
+import { CheckBox, Person2Outlined, Person2Rounded } from '@mui/icons-material';
 
 const Header = () => {
   const auth = getAuth();
@@ -22,6 +23,7 @@ const Header = () => {
   const [searchResult, setSearchResult] = useState(null);
   const products = useSelector((state) => state.amazonReducer.products);
   const userInfo = useSelector((state) => state.amazonReducer.userInfo);
+  const orders = useSelector((state) => state.amazonReducer.orders);
   const dispatch = useDispatch();
   const handleSearch = async () => {
     setSearchResult(await productSearch(searchValue));
@@ -49,8 +51,8 @@ const Header = () => {
   }, [ref, showAll, showSearch]);
 
   return (
-    <div className="sticky top-0 z-50">
-      <div className="w-full bg-amazon_blue text-white px-4 py-3 flex md:justify-between items-center gap-2 md:gap-4 lgl:gap-2 xl:gap-4">
+    <div className=" pb-5 md:pb-0 lgl:sticky bg-amazon_blue top-0 z-50">
+      <div className="w-full bg-amazon_blue text-white px-4 py-3 flex  justify-between items-center gap-2 md:gap-4 lgl:gap-2 xl:gap-4">
         {/* ===================== Header Image Start here ======================== */}
         <Link to="/">
           <div className="headerHover">
@@ -137,31 +139,36 @@ const Header = () => {
         <Link to="/signin">
           <div className="flex flex-col items-start justify-center headerHover">
             {userInfo ? (
-              <p className="text-sm  text-gray-100 font-medium">
-                {userInfo.userName.slice(0, 15)}
+              <p className="text-sm  flex text-gray-100 font-medium">
+                <span className="hidden md:inline">
+                  {userInfo.userName.slice(0, 5)}...
+                </span>
+                <Person2Rounded />
               </p>
             ) : (
-              <p className="text-xs text-lightText font-light">
+              <p className="text-xs text-center text-lightText font-light">
                 Hello, sign in
+                <Person2Rounded />
               </p>
             )}
-
-            <p className="hidden md:inline-flex text-sm font-semibold -mt-1 text-whiteText">
-              Accounts & Lists{' '}
-              <span>
-                <ArrowDropDownOutlinedIcon />
-              </span>
-            </p>
           </div>
         </Link>
         {/* ===================== Header Signin End here ========================== */}
         {/* ===================== Header Orders Start here ======================== */}
         <Link to={'/orderdetails'}>
-          <div className="hidden mdl:flex flex-col items-start justify-center headerHover">
-            <p className="text-xs text-lightText font-light">Returns</p>
-            <p className="text-sm font-semibold -mt-1 text-whiteText">
+          <div className="  relative flex-col items-start justify-center headerHover">
+            <p className="text-xs hidden mdl:flex text-lightText font-light">
+              Returns
+            </p>
+            <p className="text-sm hidden mdl:flex font-semibold -mt-1 text-whiteText">
               & Orders
             </p>
+            <span className="md:hidden">
+              <CheckBox />
+            </span>
+            <span className="absolute text-xs top-0 md:left-14 left-5  w-4 font-semibold p-1 h-4 bg-[#f3a847] text-amazon_blue rounded-full flex justify-center items-center">
+              {orders.length > 0 ? orders.length : 0}
+            </span>
           </div>
         </Link>
 
@@ -173,7 +180,7 @@ const Header = () => {
             <p className="hidden mdl:inline-flex text-xs font-semibold mt-3 text-whiteText">
               Cart
             </p>
-            <span className="absolute text-xs top-0 left-6 w-4 font-semibold p-1 h-4 bg-[#f3a847] text-amazon_blue rounded-full flex justify-center items-center">
+            <span className="absolute text-xs top-0 md:left-6 left-5 w-4 font-semibold p-1 h-4 bg-[#f3a847] text-amazon_blue rounded-full flex justify-center items-center">
               {products.length > 0 ? products.length : 0}
             </span>
           </div>
@@ -191,10 +198,48 @@ const Header = () => {
             </p>
           </div>
         )}
+        <div className="md:hidden  ">
+          <HeaderBottom />
+        </div>
         {/* ===================== Logout  End here ============================ */}
       </div>
-
-      <HeaderBottom />
+      <div className="lgl:hidden h-10 w-full bg-amazon_blue px-6    inline-flex   ">
+        <input
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            handleSearch();
+          }}
+          value={searchValue}
+          className="h-full text-base text-amazon_blue flex-grow outline-none rounded-l-lg  border-none px-2"
+          type="text"
+        />
+        <span
+          onClick={handleSearch}
+          className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md"
+        >
+          <SearchIcon />
+        </span>
+        {showSearch && (
+          <div>
+            <ul
+              ref={ref}
+              key={2}
+              className="absolute w-fit max-h-60  top-[107px] left-[27px] overflow-y-auto   overflow-x-hidden bg-white   border-amazon_blue text-black p-5 flex flex-col gap-1 z-50"
+            >
+              {searchResult.map((item) => (
+                <Link key={item._id} to={`/details/${item.id}`}>
+                  <li className="text-sm tracking-wide font-titleFont border-b-[1px] border-b-transparent hover:border-b-amazon_blue cursor-pointer duration-200">
+                    {item.title}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      <div className=" hidden md:block">
+        <HeaderBottom />
+      </div>
     </div>
   );
 };

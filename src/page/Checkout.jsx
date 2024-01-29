@@ -15,9 +15,8 @@ const Checkout = () => {
   const [bankName, setBankName] = useState('');
   const [CardNum, setCardNum] = useState('');
   const [orderDone, setOrderDone] = useState(false);
-
   const handleCheckout = () => {
-    let currentDate = new Date();
+    const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 3);
     dispatch(
       makeOrder({
@@ -29,7 +28,7 @@ const Checkout = () => {
         paymentMethod: paymentMethod,
         bankName: bankName,
         cardNum: CardNum,
-        Delived: currentDate,
+        Delived: `${currentDate}`,
       })
     );
     setOrderDone(true);
@@ -43,8 +42,8 @@ const Checkout = () => {
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <p className="mt-1 text-center text-sm md:text-xl leading-6 text-gray-700">
-                  This information will be displayed publicly so be careful what
-                  you share.
+                  This information will be used to Tracking Order ,be careful
+                  what you share.
                 </p>
               </div>
 

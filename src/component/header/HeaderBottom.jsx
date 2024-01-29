@@ -18,7 +18,7 @@ const HeaderBottom = () => {
     });
   }, [ref, sidebar]);
   return (
-    <div className="w-full px-4 h-[36px] bg-amazon_light text-white flex items-center">
+    <div className=" md:w-full  px-4 h-[36px] md:bg-amazon_light text-white flex items-center">
       {/* ======================= List Items Start here ======================== */}
       <ul className="flex items-center gap-2 text-sm tracking-wide">
         <li
@@ -26,7 +26,7 @@ const HeaderBottom = () => {
           className="flex items-center gap-1 headerHover"
         >
           <MenuIcon />
-          All
+          <span className="hidden md:inline  ">All</span>
         </li>
         <li className="hidden md:inline-flex headerHover">Today's Deals</li>
         <li className="hidden md:inline-flex headerHover">Customer Service</li>
@@ -37,7 +37,7 @@ const HeaderBottom = () => {
       {/* ======================= List Items End here ========================== */}
       {/* ======================= SideBar Start here =========================== */}
       {sidebar && (
-        <div className="w-full h-screen text-black fixed top-0 left-0 bg-amazon_blue bg-opacity-50">
+        <div className="w-full h-screen text-black fixed top-0 left-0 bg-amazon_blue bg-opacity-50 z-50">
           <div className="w-full h-full relative">
             <motion.div
               ref={ref}

@@ -3,6 +3,7 @@ const initialState = {
   products: [],
   userInfo: [],
   orders: [],
+  id: 0,
 };
 
 export const amazonSlice = createSlice({
@@ -12,11 +13,17 @@ export const amazonSlice = createSlice({
     // ============= Product Reducers Start here ===============
     // Add to cart
     addToCart: (state, action) => {
-      const item = state.products.find((item) => item.id === action.payload.id);
-      if (item) {
-        item.quantity += action.payload.quantity;
+      if (state.userInfo != null) {
+        const item = state.products.find(
+          (item) => item.id === action.payload.id
+        );
+        if (item) {
+          item.quantity += action.payload.quantity;
+        } else {
+          state.products.push(action.payload);
+        }
       } else {
-        state.products.push(action.payload);
+        window.alert('pleace Sign in  to compelte');
       }
     },
     increaseQuantity: (state, action) => {
@@ -54,12 +61,16 @@ export const amazonSlice = createSlice({
     },
     // ============= UserInfo Reducers End here ================
     makeOrder: (state, action) => {
+      state.id = state.id + 1;
       state.orders.push({
         products: [...state.products],
         info: action.payload,
+        id: state.id,
       });
-
       state.products = [];
+    },
+    deleteOrder: (state, action) => {
+      state.orders = state.orders.filter((item) => item.id !== action.payload);
     },
   },
 });
@@ -73,5 +84,6 @@ export const {
   setUserInfo,
   UserSingOut,
   makeOrder,
+  deleteOrder,
 } = amazonSlice.actions;
 export default amazonSlice.reducer;

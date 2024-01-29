@@ -17,9 +17,11 @@ export async function productDetails(id) {
   console.log(product);
   return product;
 }
-export async function productCategories() {
-  let categories = (
-    await axios.get(`https://dummyjson.com/products/categories`)
-  ).data;
-  return categories;
-}
+// export async function productCategories(categorie) {
+//   let products = (
+//     await axios.get(`https://dummyjson.com/products/category/${categorie}`)
+//   ).data.products;
+//   console.log(products);
+//   return products;
+// }
+// productCategories('smartphones');
