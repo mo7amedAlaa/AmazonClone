@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { productDetails } from '../Api/api';
 import { addToCart } from '../redux/amazonSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StarIcon from '@mui/icons-material/Star';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -11,6 +11,8 @@ function Details() {
   const [product, setProduct] = useState(null);
   const ID = useParams().id;
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.amazonReducer.userInfo);
+  const [signinErr, setSingInErr] = useState(false);
   const settings = {
     dots: true,
     fade: true,
@@ -47,22 +49,31 @@ function Details() {
               <div className="flex -mx-2 mb-4">
                 <div className=" flex-1 px-2">
                   <button
-                    onClick={() =>
-                      dispatch(
-                        addToCart({
-                          id: product.id,
-                          title: product.title,
-                          description: product.description,
-                          price: product.price,
-                          category: product.category,
-                          images: product.images,
-                          quantity: 1,
-                        })
-                      )
-                    }
+                    onClick={() => {
+                      if (userInfo) {
+                        dispatch(
+                          addToCart({
+                            id: product.id,
+                            title: product.title,
+                            description: product.description,
+                            price: product.price,
+                            category: product.category,
+                            images: product.images,
+                            stock: product.stock,
+                            rating: product.rating,
+                            discountPercentage: product.discountPercentage,
+                            quantity: 1,
+                          })
+                        );
+                      } else {
+                        setSingInErr(true);
+                      }
+                    }}
                     className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
                   >
-                    Add to Cart
+                    {signinErr == false
+                      ? 'Add to Cart '
+                      : 'Sign in To Add To Cart'}
                   </button>
                 </div>
               </div>

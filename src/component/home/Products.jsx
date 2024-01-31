@@ -3,12 +3,15 @@ import StarIcon from '@mui/icons-material/Star';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
+import { useState } from 'react';
 
 const Products = () => {
   const data = useLoaderData();
   const productsData = data;
+  const userInfo = useSelector((state) => state.amazonReducer.userInfo);
+  const [signinErr, setSingInErr] = useState(false);
   const dispatch = useDispatch();
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10 xl:gap-4 px-4">
@@ -92,25 +95,29 @@ const Products = () => {
               </div>
             </div>
             <button
-              onClick={() =>
-                dispatch(
-                  addToCart({
-                    id: item.id,
-                    title: item.title,
-                    description: item.description,
-                    price: item.price,
-                    category: item.category,
-                    images: item.images,
-                    stock: item.stock,
-                    rating: item.rating,
-                    discountPercentage: item.discountPercentage,
-                    quantity: 1,
-                  })
-                )
-              }
+              onClick={() => {
+                if (userInfo) {
+                  dispatch(
+                    addToCart({
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
+                      price: item.price,
+                      category: item.category,
+                      images: item.images,
+                      stock: item.stock,
+                      rating: item.rating,
+                      discountPercentage: item.discountPercentage,
+                      quantity: 1,
+                    })
+                  );
+                } else {
+                  setSingInErr(true);
+                }
+              }}
               className="w-full py-1.5 rounded-md mt-3 font-titleFont font-medium text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border border-yellow-500 hover:border-yellow-700 hover:from-yellow-300 to hover:to-yellow-400 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200"
             >
-              Add to Cart
+              {signinErr == false ? 'Add to Cart ' : 'Sign in To Add To Cart'}
             </button>
           </div>
         </div>

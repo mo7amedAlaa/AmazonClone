@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { UserSingOut } from '../../redux/amazonSlice';
 import { productSearch } from '../../Api/api';
-import { CheckBox, Person2Outlined, Person2Rounded } from '@mui/icons-material';
+import { CheckBox, Person2Rounded } from '@mui/icons-material';
 
 const Header = () => {
   const auth = getAuth();
@@ -65,14 +65,47 @@ const Header = () => {
           <LocationOnOutlinedIcon />
           <p className="flex flex-col text-xs text-lightText font-light">
             Deliver to{' '}
-            <span className="text-sm font-semibold -mt-1 text-whiteText">
-              Egypt
-            </span>
+            <select
+              name="location"
+              id="location"
+              className="text-sm w-fit  appearance-none   font-semibold bg-transparent outline-none border-none  -mt-1 text-whiteText "
+            >
+              <optgroup
+                label="choose your location help to delivery faster "
+                className="bg-wite text-black h-full  "
+              >
+                <option value="cairo">Alexandria</option>
+                <option value="cairo">Aswan</option>
+                <option value="cairo">Assiut</option>
+                <option value="cairo">Beheira</option>
+                <option value="cairo">Beni Suef</option>
+                <option value="cairo">Cairo</option>
+                <option value="cairo">Dakahlia</option>
+                <option value="cairo">Damietta</option>
+                <option value="cairo">Fayoum</option>
+                <option value="cairo">Gharbia</option>
+                <option value="cairo">Giza</option>
+                <option value="cairo">Kafr el-Sheikh</option>
+                <option value="cairo">Matrouh</option>
+                <option value="cairo">Minya</option>
+                <option value="cairo">Menofia</option>
+                <option value="cairo">North Sinai</option>
+                <option value="cairo">Port Said</option>
+                <option value="cairo">Qualyubia</option>
+                <option value="cairo">Qena</option>
+                <option value="cairo">Al-Sharqia</option>
+                <option value="cairo">Soha</option>
+                <option value="cairo">South Sinai</option>
+                <option value="cairo">Suez</option>
+                <option value="cairo">Luxor</option>
+                <option value="cairo">New Valley</option>
+              </optgroup>
+            </select>
           </p>
         </div>
         {/* ===================== Header Deliver End here ======================== */}
         {/* ===================== Header Search Start here ======================== */}
-        <div className="hidden lgl:inline-flex h-10 rounded-md flex-grow relative">
+        <div className="hidden lgl:inline-flex h-10  rounded-md flex-grow relative">
           <span
             onClick={() => setShowAll(!showAll)}
             className="w-14 h-full bg-gray-200 hover:bg-gray-300 border-2 cursor-pointer duration-300 text-sm text-amazon_blue font-titleFont flex items-center justify-center rounded-tl-md rounded-bl-md"
@@ -138,7 +171,7 @@ const Header = () => {
         {/* ===================== Header Signin Start here ======================== */}
         <Link to="/signin">
           <div className="flex flex-col items-start justify-center headerHover">
-            {userInfo ? (
+            {userInfo != null ? (
               <p className="text-sm  flex text-gray-100 font-medium">
                 <span className="hidden md:inline">
                   {userInfo.userName.slice(0, 5)}...
